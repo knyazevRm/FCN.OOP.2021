@@ -8,6 +8,8 @@ import java.util.Scanner;
 import org.slf4j.LoggerFactory;
 import ru.vsu.cs.knyazev.roman.entity.listUsers.CurrentListOfUsers;
 import ru.vsu.cs.knyazev.roman.entity.user.User;
+import ru.vsu.cs.knyazev.roman.service.LogicConsole;
+import ru.vsu.cs.knyazev.roman.utils.ReadConsoleUtils;
 import ru.vsu.cs.knyazev.roman.utils.SortUtils;
 import ru.vsu.cs.knyazev.roman.utils.WriteConsoleUtils;
 
@@ -25,34 +27,41 @@ public class Console implements ConsoleInterface {
 
     private WriteConsoleUtils writeConsole = new WriteConsoleUtils();
 
+    private ReadConsoleUtils read = new ReadConsoleUtils();
+
     private void searchSoulmate() {
         log.info("Start search soulmate.");
+
         System.out.println("To find a soulmate, we need some parameters.");
         System.out.println("Enter your age");
-        int age = scanner.nextInt();
+        int age = read.getAgeFrom();
         System.out.println("Enter partner's gender");
-        char gender = scanner.next().charAt(0);
+        char gender = read.getGenderFrom();
         System.out.println("Enter partner's preferred city");
-        String town = scanner.next();
+        String town = read.getTownFrom();
         System.out.println("Enter your preferred music");
-        String music = scanner.next();
+        String music = read.getMusicFrom();
         result.addAll(utils.usersSearchGender(currentListOfUsers.users, gender));
-        result = utils.usersSearchAge(result, age);
-        utils.searchTown(result, town);
+        LogicConsole.ageChoose(age);
+        LogicConsole.townChoose(town);
         utils.searchUsersMusic(result, music);
         log.info("Successful search Soulmate.");
     }
 
     private void searchFriends() {
         log.info("Start search Friends.");
+
         System.out.println("-------------------");
         System.out.println("To find a friend, we need some parameters.");
         System.out.println("Enter your age");
-        int age = scanner.nextInt();
+
+        int age = read.getAgeFrom();
         System.out.println("Enter your city");
-        String town = scanner.next();
-        result.addAll(utils.usersSearchAge(currentListOfUsers.users, age));
-        utils.searchTown(result, town);
+        String town = read.getTownFrom();
+
+        LogicConsole.ageChoose(age);
+        LogicConsole.townChoose(town);
+
         log.info("Successful search Friends.");
     }
 
@@ -62,6 +71,11 @@ public class Console implements ConsoleInterface {
         System.out.println("Hello there!");
         System.out.println("Here you can find friends and your soulmate!");
     }
+
+
+    /*
+    search не трогал
+     */
 
     @Override
     public void search() {
